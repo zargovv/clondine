@@ -3,11 +3,11 @@ mod cpinfo;
 use std::{fmt::Debug, io, rc::Rc};
 
 use cpinfo::CpInfo;
-use macros::Cpref;
+use macros::{AttributeInfo, Cpref, Deread};
 
 use crate::{
   bitfield::bitfield,
-  deread::{ByteSeq, Deread, Dereader},
+  deread::{Deread, Dereader},
 };
 
 const MAGIC: u32 = 0xcafe_babe;
@@ -98,11 +98,18 @@ impl<'a, T: CpDebug<'a>> CpDebug<'a> for Vec<T> {
   }
 }
 
-#[derive(Cpref)]
-struct AttributeInfo {
-  #[cpref]
-  attribute_name_index: u16,
-  info: ByteSeq,
+#[derive(Debug, Deread)]
+#[allow(dead_code)]
+struct LineNumberTableEntry {
+  start_pc: u16,
+  line_number: u16,
+}
+
+#[derive(AttributeInfo, Debug)]
+#[allow(dead_code)]
+enum AttributeInfoDebug {
+  LineNumberTable { entries: Vec<LineNumberTableEntry> },
+  Unknown { name: String, info: Vec<u8> },
 }
 
 #[derive(Cpref)]
@@ -112,7 +119,7 @@ struct MethodInfo {
   name_index: u16,
   #[cpref]
   descriptor_index: u16,
-  #[cpref(with = Vec<AttributeInfoDebug<'a>>)]
+  #[cpref(with = Vec<AttributeInfoDebug>)]
   attributes: Vec<AttributeInfo>,
 }
 
@@ -125,7 +132,7 @@ struct FieldInfo {
   descriptor_index: u16,
   #[cpref]
   attributes_count: u16,
-  #[cpref(with = Vec<AttributeInfoDebug<'a>>)]
+  #[cpref(with = Vec<AttributeInfoDebug>)]
   attributes: Vec<AttributeInfo>,
 }
 

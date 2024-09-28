@@ -1,4 +1,7 @@
-use std::io::{self, Read};
+use std::{
+  io::{self, Read},
+  ops::Deref,
+};
 
 pub(crate) trait Deread: Sized {
   fn deread(r: impl Dereader) -> io::Result<Self>;
@@ -29,6 +32,14 @@ impl<R: Read> Dereader for R {}
 #[derive(Debug)]
 #[allow(dead_code)]
 pub(crate) struct ByteSeq(Vec<u8>);
+
+impl Deref for ByteSeq {
+  type Target = [u8];
+
+  fn deref(&self) -> &Self::Target {
+    &self.0
+  }
+}
 
 impl Deread for ByteSeq {
   fn deread(mut r: impl Dereader) -> io::Result<Self> {
