@@ -1,7 +1,7 @@
 # Clonidine
 
 > An unofficial parser for [Java class
-> files](https://docs.oracle.com/javase/specs/jvms/se7/html/jvms-4.html) written in
+> files](https://docs.oracle.com/javase/specs/jvms/se23/html/jvms-4.html) written in
 > [Rust](https://rust-lang.org/).
 
 Clonidine is a conceptual project that implements a number of noteworthy features, leveraging only

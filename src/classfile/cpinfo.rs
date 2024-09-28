@@ -60,10 +60,24 @@ pub(crate) enum CpInfo {
     #[cpref]
     descriptor_index: u16,
   } = 16,
+  Dynamic {
+    #[cpref]
+    bootstrap_method_attr_index: u16,
+    #[cpref]
+    name_and_type_index: u16,
+  } = 17,
   InvokeDynamic {
     #[cpref]
     bootstrap_method_attr_index: u16,
     #[cpref]
     name_and_type_index: u16,
   } = 18,
+  Module {
+    #[cpref]
+    name_index: u16,
+  } = 19,
+  Package {
+    #[cpref]
+    name_index: u16,
+  } = 20,
 }
