@@ -175,8 +175,18 @@ impl Debug for ClassFile {
       //     .collect::<Vec<_>>(),
       // )
       .field("access_flags", &self.access_flags)
-      .field("this_class", &self.this_class)
-      .field("super_class", &self.super_class)
+      .field("this_class", {
+        let Some(cp) = self.constant_pool.get(self.this_class) else {
+          unreachable!();
+        };
+        &cp.debug(&self.constant_pool)
+      })
+      .field("super_class", {
+        let Some(cp) = self.constant_pool.get(self.super_class) else {
+          unreachable!();
+        };
+        &cp.debug(&self.constant_pool)
+      })
       .field("interfaces", &self.interfaces)
       .field(
         "fields",
