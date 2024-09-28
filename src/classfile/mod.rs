@@ -11,6 +11,7 @@ use crate::{
 };
 
 const MAGIC: u32 = 0xcafe_babe;
+const MAX_SUPPORTED_MAJOR_VERSION: u16 = 61;
 
 bitfield! {
   #[allow(dead_code)]
@@ -232,9 +233,19 @@ impl Deread for ClassFile {
       ));
     }
 
+    let minor_version = r.deread()?;
+    let major_version = r.deread()?;
+
+    if major_version > MAX_SUPPORTED_MAJOR_VERSION {
+      return Err(io::Error::new(
+        io::ErrorKind::InvalidData,
+        format!("Unsupported class file version: {major_version}.{minor_version}"),
+      ));
+    }
+
     Ok(Self {
-      minor_version: r.deread()?,
-      major_version: r.deread()?,
+      minor_version,
+      major_version,
       constant_pool: r.deread()?,
       access_flags: r.deread()?,
       this_class: r.deread()?,
