@@ -141,6 +141,12 @@ impl Deread for ConstantPool {
   }
 }
 
+impl ConstantPool {
+  pub(crate) fn get(&self, index: u16) -> Option<&Rc<CpInfo>> {
+    self.0.get(usize::from(index - 1))
+  }
+}
+
 pub(crate) struct ClassFile {
   minor_version: u16,
   major_version: u16,

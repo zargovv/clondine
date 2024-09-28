@@ -125,7 +125,7 @@ fn cpref_enum(
             } else {
               quote! {
                 #ident: {
-                  let Some(cp) = pool.0.get(usize::from(*#index_ident)) else {
+                  let Some(cp) = pool.get(usize::from(*#index_ident)) else {
                     unreachable!();
                   };
                   Box::new(crate::classfile::CpDebug::debug(&**cp, pool))
@@ -253,7 +253,7 @@ fn cpref_struct(
         } else {
           quote! {
             #ident: {
-              let Some(cp) = pool.0.get(usize::from(self.#index_ident)) else {
+              let Some(cp) = pool.get(usize::from(self.#index_ident)) else {
                 unreachable!();
               };
               Box::new(crate::classfile::CpDebug::debug(&**cp, pool))
